@@ -37,6 +37,7 @@ jobs:
 
       - name: Run BTC Data Updater
         env:
+          MAX_BLOCKS: ${{ secrets.MAX_BLOCKS }}
           quicknode_endpoint_1: ${{ secrets.QUICKNODE_ENDPOINT_1 }}
           quicknode_endpoint_2: ${{ secrets.QUICKNODE_ENDPOINT_2 }}
           quicknode_endpoint_3: ${{ secrets.QUICKNODE_ENDPOINT_3 }}
