@@ -26,6 +26,37 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+DEFAULT_MAX_BLOCKS = 50
+
+
+def get_max_blocks(default: int = DEFAULT_MAX_BLOCKS) -> int:
+    """
+    Read the MAX_BLOCKS environment variable as an integer.
+
+    Parameters
+    ----------
+    default : int, optional
+        Value used when MAX_BLOCKS is unset, empty or not a valid integer,
+        by default DEFAULT_MAX_BLOCKS.
+
+    Returns
+    -------
+    int
+        Maximum number of blocks to fetch per run.
+    """
+    raw_value = os.getenv("MAX_BLOCKS")
+    if raw_value is None or not raw_value.strip():
+        return default
+
+    try:
+        return int(raw_value.strip())
+    except ValueError:
+        logger.warning(
+            "Invalid MAX_BLOCKS value %r, falling back to %d", raw_value, default
+        )
+        return default
+
+
 def update_onchain_data(api: QuickNodeAPI, max_blocks: int = 5) -> None:
     """
     Update on-chain block stats data sequentially.
@@ -124,7 +155,7 @@ def main() -> None:
     logger.info("Loaded %d API key(s)", len(api_keys))
 
     api = QuickNodeAPI(api_keys, 0)
-    update_onchain_data(api, max_blocks=os.getenv("MAX_BLOCKS",40))
+    update_onchain_data(api, max_blocks=get_max_blocks())
 
     logger.info("=== Done ===")
 
