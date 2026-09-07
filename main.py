@@ -124,7 +124,7 @@ def main() -> None:
     logger.info("Loaded %d API key(s)", len(api_keys))
 
     api = QuickNodeAPI(api_keys, 0)
-    update_onchain_data(api, max_blocks=os.getenv(MAX_BLOCKS,40))
+    update_onchain_data(api, max_blocks=os.getenv("MAX_BLOCKS",40))
 
     logger.info("=== Done ===")
 
